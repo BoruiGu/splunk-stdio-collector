@@ -1,0 +1,44 @@
+# to use, create symbolic link /usr/local/share/grc/conf.ezelog to this file
+
+# most important labels
+regexp=Message=[\"{].+?([\"}]|\+[0-9]+ chars\))(?=, \w+=)
+colours=blue
+count=more
+======
+regexp=Exception=[\"{].+?([\"}]|\+[0-9]+ chars\))(?=, \w+=)
+colours=blue
+count=more
+======
+regexp=((\w*Duration)|(TimeElapsedInMs))=\d+(?=, )
+colours=blue
+count=more
+======
+
+# other important labels
+regexp=(Type|ActivityId|FirmName|UserName|OperationName)=\"
+colours=magenta
+count=more
+======
+# ex: [Action]
+regexp=\[\w+\]
+colours=magenta
+count=more
+======
+
+# log levels [DEBUG, INFO, WARN, ERROR] map to [default, green, yellow, red]
+regexp=Level=\"(DEBUG)\"
+colours=default
+count=once
+======
+regexp=Level=\"(INFO)\"
+colours=green
+count=once
+======
+regexp=Level=\"(WARN)\"
+colours=yellow
+count=once
+======
+regexp=Level=\"(ERROR)\"
+colours=red
+count=once
+======
