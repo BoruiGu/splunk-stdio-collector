@@ -75,11 +75,11 @@ it('stackTraceMerger', async () => {
     expect(output).toEqual(['a\n  at hh\n  at qq', 'b\nat gg'])
 })
 
-async function concat(source: AsyncGenerator<string, void, unknown>) {
+async function concat(source: AsyncGenerator<string>) {
     return (await toArray(source)).join('\n')
 }
 
-async function toArray(source: AsyncGenerator<string, void, unknown>) {
+async function toArray(source: AsyncGenerator<string>) {
     const lines: string[] = []
     for await (const line of source) {
         lines.push(line)

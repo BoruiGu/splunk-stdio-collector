@@ -1,5 +1,3 @@
-# to use, create symbolic link /usr/local/share/grc/conf.ezelog to this file
-
 # most important labels
 regexp=Message=[\"{].+?([\"}]|\+[0-9]+ chars\))(?=, \w+=)
 colours=blue

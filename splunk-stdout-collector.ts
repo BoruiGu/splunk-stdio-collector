@@ -2,6 +2,7 @@
 import * as os from 'os'
 import * as stream from 'stream/promises'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
+import { name as packageName } from './package.json'
 import { createColorizer } from './colorizer'
 import { splitter } from './splitter'
 import { noop } from './util'
@@ -19,6 +20,8 @@ if (!SPLUNK_URL || !SPLUNK_TOKEN) {
     process.exit(1)
 }
 
+process.title = packageName
+
 const config: Config = {
     token: SPLUNK_TOKEN,
     url: SPLUNK_URL,
@@ -29,6 +32,7 @@ const config: Config = {
 
 const splunkLogger = new SplunkLogger(config)
 splunkLogger.eventFormatter = (log) => log
+// todo error?
 const send = (log: string) => splunkLogger.send({
     message: log,
     metadata: {
@@ -58,4 +62,5 @@ await stream.pipeline(
     },
 )
 
+// todo check
 console.log(`end of input (${counter} logs), check logs in splunk then hit ctrl+c to exit`)
