@@ -2,7 +2,9 @@
   "name": "splunk-stdout-collector",
   "version": "1.0.0",
   "description": "send logs from stdout to splunk",
-  "bin": "splunk-stdout-collector.ts",
+  "bin": {
+    "splunk-stdout-collector": "src/cli.ts"
+  },
   "author": "Borui Gu",
   "engines": {
 		"node": ">=16"

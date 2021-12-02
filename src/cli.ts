@@ -2,7 +2,7 @@
 import * as os from 'os'
 import * as stream from 'stream/promises'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
-import { name as packageName } from './package.json'
+import { name as packageName } from '../package.json'
 import { createColorizer } from './colorizer'
 import { splitter } from './splitter'
 import { noop } from './util'
