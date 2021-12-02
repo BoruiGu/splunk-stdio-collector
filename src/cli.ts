@@ -43,14 +43,14 @@ const sendToSplunk = (log: string) => send({
     message: log,
     metadata: {
         source,
-        sourcetype: "stdout",
+        sourcetype: "stdio",
         host: os.hostname(),
     },
 }).catch(console.error)
 
 let counter = 0
 
-// ignore ctrl+c, only exit when stdin is closed
+// ignore ctrl+c, exit only when stdin is closed
 process.on('SIGINT', noop)
 
 // @ts-ignore
@@ -69,7 +69,6 @@ await stream.pipeline(
     },
 )
 
-// @ts-ignore type mismatch with library
 if (splunkLogger.serializedContextQueue.length > 0) {
     await flush().catch(console.error)
 }
