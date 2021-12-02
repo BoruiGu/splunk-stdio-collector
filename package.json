@@ -7,8 +7,8 @@
   },
   "author": "Borui Gu",
   "engines": {
-		"node": ">=16"
-	},
+    "node": ">=16"
+  },
   "scripts": {
     "test": "tsm test.ts"
   },
