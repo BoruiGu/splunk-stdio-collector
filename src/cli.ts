@@ -5,7 +5,7 @@ import { promisify } from 'util'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
 import meow from 'meow'
 import { splitter } from './splitter.js'
-import { noop, createLogger } from './util.js'
+import { noop, createLogger, attachErrorHandler } from './util.js'
 import { stackTraceMerger } from './stackTraceMerger.js'
 
 const {
@@ -96,10 +96,13 @@ const config: Config = {
 
 const splunkLogger = new SplunkLogger(config)
 splunkLogger.eventFormatter = (log) => log
-const send = promisify(splunkLogger.send)
-const flush = promisify(splunkLogger.flush)
-// splunk-logging library will log errors to console (can't be configured)
-const handleSplunkError = () => error('error writing to splunk, check log above for details')
+
+// splunk-logger internally logs errors with `console.log`
+// * use `error` method to make error easier to read and respect log level from options
+// * catch and ignore rejections as error is logged already
+const send = attachErrorHandler(promisify(splunkLogger.send), noop)
+const flush = attachErrorHandler(promisify(splunkLogger.flush), noop)
+console.log = error
 
 const sendToSplunk = (log: string) =>
     send({
@@ -109,7 +112,7 @@ const sendToSplunk = (log: string) =>
             sourcetype,
             host,
         },
-    }).catch(handleSplunkError)
+    })
 
 let counter = 0
 
@@ -128,7 +131,7 @@ await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function 
 process.removeListener('SIGINT', noop)
 
 if (splunkLogger.serializedContextQueue.length > 0) {
-    await flush().catch(handleSplunkError)
+    await flush()
 }
 // @ts-ignore workaround an issue where splunk-logging library does not clear internal timers and prevent node from exiting
 // https://github.com/splunk/splunk-javascript-logging/issues/13

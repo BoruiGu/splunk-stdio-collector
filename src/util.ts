@@ -1,7 +1,7 @@
 import { EOL } from 'os'
 
-export function noop(input: string) {
-    return input
+export const noop = () => {
+    /** noop */
 }
 
 export function createLogger({ packageName, quiet, silent }: { packageName: string | undefined; quiet: boolean; silent: boolean }) {
@@ -13,16 +13,26 @@ export function createLogger({ packageName, quiet, silent }: { packageName: stri
         },
         message(...params: unknown[]) {
             if (!silent) {
-                console.error(`${[packageName]}`, ...params)
+                console.error(`[${packageName}]`, ...params)
             }
         },
         error(...params: unknown[]) {
             if (!silent) {
-                console.error(`${[packageName]}:`, ...params.map(getFirstLine))
+                console.error(`[${packageName}]`, ...params.map(getFirstLine))
             }
         },
     }
 }
+
+type AttachErrorHandlerFn = <T extends (...args: any[]) => Promise<any>>(
+    fn: T,
+    errorHandler: (err: unknown) => void
+) => (...args: Parameters<T>) => ReturnType<T>
+
+export const attachErrorHandler: AttachErrorHandlerFn =
+    (fn, errorHandler) =>
+    (...args) =>
+        fn(...args).catch(errorHandler) as ReturnType<typeof fn>
 
 function getFirstLine(value: unknown) {
     if (value instanceof Error) {
