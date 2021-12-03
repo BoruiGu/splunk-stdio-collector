@@ -21,13 +21,15 @@ brew install coreutils # optional but recommeneded, turn off buffering in pipe
 splunk-stdio-collector [options]
 
 Options:
--s, --source <str>      Set \`source\` field in logs [default: stdio]
--st, --sourcetype <str> Set \`sourcetype\` field in logs
---host <str>            Set \`host\` field in logs [default: host name of the operating system]
+-sc, --source <str>      Set \`source\` field in logs [default: stdio]
+-st, --sourcetype <str>  Set \`sourcetype\` field in logs
+--host <str>             Set \`host\` field in logs [default: host name of the operating system]
+-q, --quiet              Don't forward logs to stdout
+-s, --silent             Mute all output
 
 alias: ssc
 
 Examples:
-$ stdbuf -i0 -o0 -e0 npm start | ssc -st my-program
-$ cat log.txt | ssc
+$ stdbuf -i0 -o0 -e0 npm start | ssc --sourcetype my-program
+$ cat log.txt | ssc --quiet
 ```

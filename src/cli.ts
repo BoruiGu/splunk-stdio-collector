@@ -4,16 +4,15 @@ import * as stream from 'stream/promises'
 import { promisify } from 'util'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
 import meow from 'meow'
-import { name as packageName } from '../package.json'
 import { splitter } from './splitter'
-import { noop } from './util'
+import { noop, createLogger } from './util'
 import { stackTraceMerger } from './stackTraceMerger'
 
 // todo help & version
 const {
     showHelp,
     showVersion,
-    flags: { source, sourcetype, host },
+    flags: { source, sourcetype, host, quiet, silent },
 } = meow(
     `
 Usage:
@@ -24,22 +23,24 @@ SPLUNK_URL=<url>
 SPLUNK_TOKEN=<token>
 
 Options:
--s, --source <str>       Set \`source\` field in logs [default: stdio]
+-sc, --source <str>      Set \`source\` field in logs [default: stdio]
 -st, --sourcetype <str>  Set \`sourcetype\` field in logs
 --host <str>             Set \`host\` field in logs [default: host name of the operating system]
+-q, --quiet              Don't forward logs to stdout
+-s, --silent             Mute all output
 
 alias: ssc
 
 Examples:
-  $ stdbuf -i0 -o0 -e0 npm start | ssc -st my-program
-  $ cat log.txt | ssc
+$ stdbuf -i0 -o0 -e0 npm start | ssc --sourcetype my-program
+$ cat log.txt | ssc --quiet
 `,
     {
         importMeta: import.meta,
         flags: {
             source: {
                 type: 'string',
-                alias: 's',
+                alias: 'sc',
                 default: 'stdio',
             },
             sourcetype: {
@@ -50,23 +51,33 @@ Examples:
                 type: 'string',
                 default: os.hostname(),
             },
+            quiet: {
+                type: 'boolean',
+                default: false,
+                alias: 'q',
+            },
+            silent: {
+                type: 'boolean',
+                default: false,
+                alias: 's',
+            },
         },
         autoHelp: true,
         autoVersion: true,
     }
 )
 
-const message = (...params: any[]) => console.error(`${packageName}:`, ...params)
-
 if (process.stdin.isTTY) {
     showHelp()
 }
+
+const { output, message, error } = createLogger({ quiet, silent })
 
 const SPLUNK_URL = process.env.SPLUNK_URL
 const SPLUNK_TOKEN = process.env.SPLUNK_TOKEN
 
 if (!SPLUNK_URL || !SPLUNK_TOKEN) {
-    message(`SPLUNK_URL and SPLUNK_TOKEN environment variables are required`)
+    error(`SPLUNK_URL and SPLUNK_TOKEN environment variables are required`)
     process.exit(1)
 }
 
@@ -82,6 +93,8 @@ const splunkLogger = new SplunkLogger(config)
 splunkLogger.eventFormatter = (log) => log
 const send = promisify(splunkLogger.send)
 const flush = promisify(splunkLogger.flush)
+// splunk-logging library will log errors to console (can't be configured)
+const handleSplunkError = () => error('error writing to splunk, check log above for details')
 
 const sendToSplunk = (log: string) =>
     send({
@@ -91,24 +104,24 @@ const sendToSplunk = (log: string) =>
             sourcetype,
             host,
         },
-    }).catch(message)
+    }).catch(handleSplunkError)
 
 let counter = 0
 
 // ignore ctrl+c, exit only when stdin is closed
 process.on('SIGINT', noop)
 
-// @ts-ignore
+// @ts-ignore todo
 await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function (logs: string) {
     for await (const log of logs) {
         counter++
         sendToSplunk(log)
-        console.log(log)
+        output(log)
     }
 })
 
 if (splunkLogger.serializedContextQueue.length > 0) {
-    await flush().catch(message)
+    await flush().catch(handleSplunkError)
 }
 // @ts-ignore workaround an issue where splunk-logging library does not clear internal timers and prevent node from exiting
 // https://github.com/splunk/splunk-javascript-logging/issues/13
