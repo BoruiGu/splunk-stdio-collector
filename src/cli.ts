@@ -108,7 +108,7 @@ const sendToSplunk = (log: string) =>
 
 let counter = 0
 
-// ignore ctrl+c, exit only when stdin is closed
+// ignore ctrl+c, exit only when stdin ends
 process.on('SIGINT', noop)
 
 // @ts-ignore todo
@@ -119,6 +119,9 @@ await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function 
         output(log)
     }
 })
+
+// stdin ended, restore default ctrl+c behavior so even if splunk-logger hangs user can get out
+process.removeListener('SIGINT', noop)
 
 if (splunkLogger.serializedContextQueue.length > 0) {
     await flush().catch(handleSplunkError)
