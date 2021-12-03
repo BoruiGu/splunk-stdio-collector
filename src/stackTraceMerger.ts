@@ -1,8 +1,8 @@
-export async function* stackTraceMerger(source: NodeJS.ReadableStream) {
+export async function* stackTraceMerger(source: AsyncIterable<string>) {
     let log = ''
 
     for await (const line of source) {
-        if (isStackTrace(line as string)) {
+        if (isStackTrace(line)) {
             log += '\n' + line
             continue
         }
@@ -11,7 +11,7 @@ export async function* stackTraceMerger(source: NodeJS.ReadableStream) {
             yield log
         }
 
-        log = line as string
+        log = line
     }
 
     if (log.length > 0) {

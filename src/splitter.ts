@@ -1,5 +1,6 @@
 import stripAnsi from 'strip-ansi'
 
+/** transform text stream into line stream */
 export async function* splitter(source: NodeJS.ReadableStream) {
     source.setEncoding('utf-8')
     let str = ''

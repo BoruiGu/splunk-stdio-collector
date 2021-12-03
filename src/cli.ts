@@ -11,7 +11,6 @@ import { stackTraceMerger } from './stackTraceMerger'
 // todo help & version
 const {
     showHelp,
-    showVersion,
     flags: { source, sourcetype, host, quiet, silent },
 } = meow(
     `
@@ -111,8 +110,7 @@ let counter = 0
 // ignore ctrl+c, exit only when stdin ends
 process.on('SIGINT', noop)
 
-// @ts-ignore todo
-await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function (logs: string) {
+await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function (logs: AsyncIterable<string>) {
     for await (const log of logs) {
         counter++
         sendToSplunk(log)
