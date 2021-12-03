@@ -7,6 +7,9 @@
         "ssc": "src/cli.ts",
         "splunk-stdio-collector": "src/cli.ts"
     },
+    "files": [
+        "src"
+    ],
     "type": "module",
     "engines": {
         "node": ">=16"
