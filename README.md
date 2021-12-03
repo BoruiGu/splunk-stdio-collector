@@ -1,19 +1,33 @@
 # Splunk Stdio Collector
 
+Send logs from input stream to splunk
+
 ## Requirement
 
-set environmet variable `SPLUNK_URL` and `SPLUNK_TOKEN`
+Node.js >= 16.13.0
+
+set environmet variables `SPLUNK_URL` and `SPLUNK_TOKEN`
+
+## Install
+
+```bash
+npm install --global tsm splunk-stdout-collector
+brew install coreutils # optional but recommeneded, turn off buffering in pipe
+```
 
 ## Usage
 
-```bash
-npm install --global tsm
-brew install coreutils
+```text
+splunk-stdio-collector [options]
 
-npm ci
-npm link
+Options:
+-s, --source <str>      Set \`source\` field in logs [default: stdio]
+-st, --sourcetype <str> Set \`sourcetype\` field in logs
+--host <str>            Set \`host\` field in logs [default: host name of the operating system]
 
-stdbuf -i0 -o0 -e0 <command> | splunk-stdio-collector [-s (silent)] [source (optional)]
+alias: ssc
+
+Examples:
+$ stdbuf -i0 -o0 -e0 npm start | ssc -st my-program
+$ cat log.txt | ssc
 ```
-
-the log will have `sourcetype=stdio`, `host` set to your host name, and `source` (if provided)
