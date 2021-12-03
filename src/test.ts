@@ -1,15 +1,15 @@
 import * as stream from 'stream'
 import { splitter } from './splitter'
-import { stackTraceMerger } from './stackTraceMerger';
+import { stackTraceMerger } from './stackTraceMerger'
 
 const it = async (testCase: string, exec: () => Promise<void>) => {
     try {
-        await exec();
+        await exec()
     } catch (error) {
-        console.error(`${testCase} failed: ${error}`);
-        return;
+        console.error(`${testCase} failed: ${error}`)
+        return
     }
-    console.log(`${testCase} passed`);
+    console.log(`${testCase} passed`)
 }
 
 const expect = <T>(actual: T) => ({
@@ -28,22 +28,22 @@ const expect = <T>(actual: T) => ({
 it('splitter', async () => {
     let output: string
 
-    output = await concat(splitter(stream.Readable.from(['a', 'bc\n', 'def\n'])))        
+    output = await concat(splitter(stream.Readable.from(['a', 'bc\n', 'def\n'])))
     expect(output).toBe('abc\ndef')
 
-    output = await concat(splitter(stream.Readable.from(['a', 'bc\n', 'def'])))        
+    output = await concat(splitter(stream.Readable.from(['a', 'bc\n', 'def'])))
     expect(output).toBe('abc\ndef')
 
-    output = await concat(splitter(stream.Readable.from(['a', 'bc', '\ndef'])))        
+    output = await concat(splitter(stream.Readable.from(['a', 'bc', '\ndef'])))
     expect(output).toBe('abc\ndef')
 
-    output = await concat(splitter(stream.Readable.from(['a', 'b', 'c\nde', 'f'])))        
+    output = await concat(splitter(stream.Readable.from(['a', 'b', 'c\nde', 'f'])))
     expect(output).toBe('abc\ndef')
 
-    output = await concat(splitter(stream.Readable.from(['abc\ndef'])))        
+    output = await concat(splitter(stream.Readable.from(['abc\ndef'])))
     expect(output).toBe('abc\ndef')
 
-    output = await concat(splitter(stream.Readable.from(['abc\ndef\n'])))        
+    output = await concat(splitter(stream.Readable.from(['abc\ndef\n'])))
     expect(output).toBe('abc\ndef')
 
     output = await concat(splitter(stream.Readable.from([...'abc\ndef\n'])))
