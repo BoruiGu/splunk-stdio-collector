@@ -1,9 +1,10 @@
-import { createLogger } from '../src/util'
+import { jest } from '@jest/globals'
+import { createLogger, noop } from '../src/util'
 
 describe('util', () => {
     test('createLogger', async () => {
-        jest.spyOn(console, 'error')
-        const { error } = createLogger({ quiet: false, silent: false })
+        jest.spyOn(console, 'error').mockImplementation(noop)
+        const { error } = createLogger({ packageName: 'my-pkg', quiet: false, silent: false })
 
         const func = async () => {
             await Promise.resolve()
@@ -11,9 +12,9 @@ describe('util', () => {
         }
 
         await func().catch(error)
-        expect(console.error).toHaveBeenCalledWith('splunk-stdio-collector:', 'noo')
+        expect(console.error).toHaveBeenCalledWith('[my-pkg]', 'noo')
 
         error('err\n at a.file\n at b.file')
-        expect(console.error).toHaveBeenCalledWith('splunk-stdio-collector:', 'err')
+        expect(console.error).toHaveBeenCalledWith('[my-pkg]', 'err')
     })
 })

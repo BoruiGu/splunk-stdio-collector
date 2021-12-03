@@ -11,7 +11,7 @@ set environmet variables `SPLUNK_URL` and `SPLUNK_TOKEN`
 ## Install
 
 ```bash
-npm install --global tsm splunk-stdout-collector
+npm install --global splunk-stdout-collector
 brew install coreutils # optional but recommeneded, turn off buffering in pipe
 ```
 

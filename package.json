@@ -17,17 +17,19 @@
     },
     "homepage": "https://github.com/BoruiGu/splunk-stdio-collector#readme",
     "bin": {
-        "ssc": "src/cli.ts",
-        "splunk-stdio-collector": "src/cli.ts"
+        "ssc": "dist/cli.js",
+        "splunk-stdio-collector": "dist/cli.js"
     },
     "files": [
-        "src"
+        "dist"
     ],
     "type": "module",
     "engines": {
         "node": ">=16.13.0"
     },
     "scripts": {
+        "build": "esbuild src/*.ts --outdir=dist",
+        "dev": "npm run build -- --watch",
         "test": "tsc && node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
     "dependencies": {
@@ -39,6 +41,7 @@
         "@types/jest": "^27.0.3",
         "@types/node": "^16.11.11",
         "@types/splunk-logging": "^0.11.0",
+        "esbuild": "^0.14.1",
         "jest": "^27.4.3",
         "ts-jest": "^27.0.7",
         "typescript": "^4.5.2"

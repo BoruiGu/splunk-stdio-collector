@@ -1,15 +1,15 @@
-#!/usr/bin/env tsm
+#!/usr/bin/env node
 import * as os from 'os'
 import * as stream from 'stream/promises'
 import { promisify } from 'util'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
 import meow from 'meow'
-import { splitter } from './splitter'
-import { noop, createLogger } from './util'
-import { stackTraceMerger } from './stackTraceMerger'
+import { splitter } from './splitter.js'
+import { noop, createLogger } from './util.js'
+import { stackTraceMerger } from './stackTraceMerger.js'
 
-// todo help & version
 const {
+    pkg: { name: packageName },
     showHelp,
     flags: { source, sourcetype, host, quiet, silent },
 } = meow(
@@ -60,6 +60,12 @@ $ cat log.txt | ssc --quiet
                 default: false,
                 alias: 's',
             },
+            help: {
+                alias: 'h',
+            },
+            version: {
+                alias: 'v',
+            },
         },
         autoHelp: true,
         autoVersion: true,
@@ -70,7 +76,7 @@ if (process.stdin.isTTY) {
     showHelp()
 }
 
-const { output, message, error } = createLogger({ quiet, silent })
+const { output, message, error } = createLogger({ packageName, quiet, silent })
 
 const SPLUNK_URL = process.env.SPLUNK_URL
 const SPLUNK_TOKEN = process.env.SPLUNK_TOKEN

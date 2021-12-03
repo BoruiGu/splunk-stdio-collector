@@ -1,11 +1,10 @@
 import { EOL } from 'os'
-import { name as packageName } from '../package.json'
 
 export function noop(input: string) {
     return input
 }
 
-export function createLogger({ quiet, silent }: { quiet: boolean; silent: boolean }) {
+export function createLogger({ packageName, quiet, silent }: { packageName: string | undefined; quiet: boolean; silent: boolean }) {
     return {
         output(...params: unknown[]) {
             if (!quiet && !silent) {
@@ -14,12 +13,12 @@ export function createLogger({ quiet, silent }: { quiet: boolean; silent: boolea
         },
         message(...params: unknown[]) {
             if (!silent) {
-                console.error(`${packageName}:`, ...params)
+                console.error(`${[packageName]}`, ...params)
             }
         },
         error(...params: unknown[]) {
             if (!silent) {
-                console.error(`${packageName}:`, ...params.map(getFirstLine))
+                console.error(`${[packageName]}:`, ...params.map(getFirstLine))
             }
         },
     }
