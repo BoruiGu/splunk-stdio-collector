@@ -27,7 +27,7 @@ Options:
 -st, --sourcetype <str>  Set \`sourcetype\` field in logs
 --host <str>             Set \`host\` field in logs [default: host name of the operating system]
 -q, --quiet              Don't forward logs to stdout
--s, --silent             Mute all output
+-s, --silent             Mute outputs
 
 alias: ssc
 
