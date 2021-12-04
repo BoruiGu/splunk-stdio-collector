@@ -28,7 +28,7 @@
         "node": ">=16.13.0"
     },
     "scripts": {
-        "build": "esbuild src/*.ts --outdir=dist",
+        "build": "esbuild src/*.ts --outdir=dist --sourcemap",
         "dev": "npm run build -- --watch",
         "test": "tsc && node --experimental-vm-modules node_modules/jest/bin/jest.js"
     },
@@ -42,11 +42,25 @@
         "@types/node": "^16.11.11",
         "@types/splunk-logging": "^0.11.0",
         "esbuild": "^0.14.1",
+        "execa": "^6.0.0",
+        "husky": "^7.0.4",
         "jest": "^27.4.3",
+        "lint-staged": "^12.1.2",
+        "prettier": "^2.5.0",
         "ts-jest": "^27.0.7",
+        "tsm": "^2.2.1",
         "typescript": "^4.5.2"
     },
     "jest": {
+        "__comment": "not collect coverage due to istanbul esm issue https://github.com/istanbuljs/istanbuljs/issues/614",
+        "collectCoverage": false,
+        "coverageReporters": [
+            "text-summary",
+            "html-spa"
+        ],
+        "collectCoverageFrom": [
+            "src/**/*.{ts,tsx}"
+        ],
         "transform": {
             "\\.[jt]sx?$": "ts-jest"
         },

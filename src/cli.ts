@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import * as os from 'os'
-import * as stream from 'stream/promises'
+import { hostname } from 'os'
+import { pipeline } from 'stream/promises'
+import { fstatSync } from 'fs'
 import { promisify } from 'util'
 import { Config, Logger as SplunkLogger } from 'splunk-logging'
 import meow from 'meow'
@@ -48,7 +49,7 @@ $ cat log.txt | ssc --quiet
             },
             host: {
                 type: 'string',
-                default: os.hostname(),
+                default: hostname(),
             },
             quiet: {
                 type: 'boolean',
@@ -72,7 +73,8 @@ $ cat log.txt | ssc --quiet
     }
 )
 
-if (process.stdin.isTTY) {
+const isPipedIn = fstatSync(process.stdin.fd).isFIFO()
+if (process.stdin.isTTY || !isPipedIn) {
     showHelp()
 }
 
@@ -119,7 +121,7 @@ let counter = 0
 // ignore ctrl+c, exit only when stdin ends
 process.on('SIGINT', noop)
 
-await stream.pipeline(process.stdin, splitter, stackTraceMerger, async function (logs: AsyncIterable<string>) {
+await pipeline(process.stdin, splitter, stackTraceMerger, async function (logs: AsyncIterable<string>) {
     for await (const log of logs) {
         counter++
         sendToSplunk(log)
