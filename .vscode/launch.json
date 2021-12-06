@@ -9,7 +9,8 @@
             "disableOptimisticBPs": true,
             "cwd": "${workspaceFolder}",
             "args": ["--experimental-vm-modules", "node_modules/jest/bin/jest.js", "--runInBand", "--watchAll=false"],
-            "autoAttachChildProcesses": true
+            "autoAttachChildProcesses": true,
+            "skipFiles": []
         }
     ]
 }
