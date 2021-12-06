@@ -9,7 +9,10 @@
     },
     "keywords": [
         "splunk",
-        "logging"
+        "logging",
+        "stdio",
+        "stdin",
+        "stdout"
     ],
     "license": "MIT",
     "bugs": {
@@ -51,8 +54,8 @@
         "tsm": "^2.2.1",
         "typescript": "^4.5.2"
     },
+    "__todo": "not collect coverage due to istanbul esm issue https://github.com/istanbuljs/istanbuljs/issues/614",
     "jest": {
-        "__comment": "not collect coverage due to istanbul esm issue https://github.com/istanbuljs/istanbuljs/issues/614",
         "collectCoverage": false,
         "coverageReporters": [
             "text-summary",
