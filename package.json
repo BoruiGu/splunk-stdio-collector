@@ -33,7 +33,11 @@
     "scripts": {
         "build": "esbuild src/*.ts --outdir=dist --sourcemap",
         "dev": "npm run build -- --watch",
-        "test": "tsc && node --experimental-vm-modules node_modules/jest/bin/jest.js"
+        "test": "tsc && node --experimental-vm-modules node_modules/jest/bin/jest.js",
+        "check-format": "prettier --check --ignore-path .gitignore .",
+        "postinstall": "husky install",
+        "pre-commit": "lint-staged",
+        "commit-msg": "commitlint --edit $1"
     },
     "dependencies": {
         "meow": "^10.1.2",
@@ -41,15 +45,19 @@
         "strip-ansi": "^7.0.1"
     },
     "devDependencies": {
+        "@commitlint/cli": "^15.0.0",
+        "@commitlint/config-conventional": "^15.0.0",
         "@types/jest": "^27.0.3",
         "@types/node": "^16.11.11",
         "@types/splunk-logging": "^0.11.0",
         "esbuild": "^0.14.1",
         "execa": "^6.0.0",
+        "extract-changelog-release": "^1.0.2",
         "husky": "^7.0.4",
         "jest": "^27.4.3",
         "lint-staged": "^12.1.2",
         "prettier": "^2.5.0",
+        "standard-version": "^9.3.2",
         "ts-jest": "^27.0.7",
         "tsm": "^2.2.1",
         "typescript": "^4.5.2"
@@ -78,5 +86,15 @@
         "moduleNameMapper": {
             "^(\\.{1,2}/.*)\\.js$": "$1"
         }
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx,json,scss,css,html,md,json}": [
+            "prettier --write"
+        ]
+    },
+    "commitlint": {
+        "extends": [
+            "@commitlint/config-conventional"
+        ]
     }
 }

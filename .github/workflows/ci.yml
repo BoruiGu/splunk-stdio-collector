@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: ci
+on:
+    push:
+        branches:
+            - main
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - uses: actions/setup-node@v2
+              with:
+                  node-version: '16'
+                  cache: 'npm'
+            - run: npm ci
+            - run: npm run check-format
+            - run: npm test
+            - name: Detect if release is necessary
+              id: should_release
+              run: |
+                  set -euo pipefail
+                  # workaround https://github.com/conventional-changelog/standard-version/issues/192
+                  script=$(cat << 'EOF'
+                  const commitMessages = process.env.COMMIT_MESSAGES.split(',');
+                  console.error('checking commit messages');
+                  console.error(commitMessages.map(m => `> ${m}`).join('\n'));
+                  const shouldRelease = commitMessages.some(
+                    (message) =>
+                      /^(feat|fix|perf|refactor|revert)/.test(message) ||
+                      message.includes('!:') ||
+                      message.includes('BREAKING CHANGE') ||
+                      message.includes('[create release]')
+                  );
+                  console.error("should release:", shouldRelease);
+                  console.log(shouldRelease ? 'y' : 'n');
+                  EOF
+                  )
+                  should_release=$(echo $script | node -)
+                  echo "::set-output name=should_release::$should_release"
+              env:
+                  COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
+            - name: Prepare release
+              id: prepare_release
+              run: |
+                  set -euo pipefail
+                  git config user.name "github-actions"
+                  git config user.email "<41898282+github-actions[bot]@users.noreply.github.com>"
+                  # workaround https://github.com/conventional-changelog/standard-version/issues/610
+                  npx standard-version
+                  npx extract-changelog-release > RELEASE_BODY.md
+                  npm run build
+                  git push --follow-tags
+                  echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
+              if: ${{ steps.should_release.outputs.should_release == 'y' }}
+            - name: Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  name: ${{ steps.prepare_release.outputs.tag_name }}
+                  tag_name: ${{ steps.prepare_release.outputs.tag_name }}
+                  body_path: RELEASE_BODY.md
+              if: ${{ steps.should_release.outputs.should_release == 'y' }}
+            - name: Publish NPM
+              run: npm publish
