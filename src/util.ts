@@ -5,20 +5,21 @@ export const noop = () => {
 }
 
 export function createLogger({ packageName, quiet, silent }: { packageName: string | undefined; quiet: boolean; silent: boolean }) {
+    const { log, error } = console
     return {
         output(...params: unknown[]) {
             if (!quiet && !silent) {
-                console.log(...params)
+                log(...params)
             }
         },
         message(...params: unknown[]) {
             if (!silent) {
-                console.error(`[${packageName}]`, ...params)
+                error(`[${packageName}]`, ...params)
             }
         },
         error(...params: unknown[]) {
             if (!silent) {
-                console.error(`[${packageName}]`, ...params.map(getFirstLine))
+                error(`[${packageName}]`, ...params.map(getFirstLine))
             }
         },
     }
