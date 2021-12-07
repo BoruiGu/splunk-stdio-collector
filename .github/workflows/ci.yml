@@ -15,6 +15,7 @@ jobs:
               with:
                   node-version: '16'
                   cache: 'npm'
+                  registry-url: 'https://registry.npmjs.org'
             - run: npm ci
             - run: npm run check-format
             - run: npm test
@@ -63,7 +64,7 @@ jobs:
                   body_path: RELEASE_BODY.md
               if: ${{ steps.should_release.outputs.should_release == 'y' }}
             - name: Publish NPM
-              run: npm publish --access public
+              run: npm publish
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
               if: ${{ steps.should_release.outputs.should_release == 'y' }}
