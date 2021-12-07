@@ -1,0 +1,4 @@
+# identify ts file with node shebang as typescript
+# https://github.com/github/linguist/issues/4558
+# https://github.com/github/linguist/blob/master/docs/overrides.md
+*.ts linguist-language=Typescript
