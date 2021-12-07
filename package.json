@@ -35,7 +35,6 @@
         "dev": "npm run build -- --watch",
         "test": "tsc && node --experimental-vm-modules node_modules/jest/bin/jest.js",
         "check-format": "prettier --check --ignore-path .gitignore .",
-        "postinstall": "husky install",
         "pre-commit": "lint-staged",
         "commit-msg": "commitlint --edit $1"
     },
