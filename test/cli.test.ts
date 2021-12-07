@@ -34,10 +34,10 @@ describe('cli', () => {
         expect(stdout).toContain('Usage')
     })
 
-    test('prints help and exit if stdin is tty', async () => {
-        const { stdout } = await execa('tsm', [cliPath], { ...options, stdin: new tty.ReadStream(0) }).catch((err) => err)
-        expect(stdout).toContain('Usage')
-    })
+    // test('prints help and exit if stdin is tty', async () => {
+    //     const { stdout } = await execa('tsm', [cliPath], { ...options, stdin: new tty.ReadStream(0) }).catch((err) => err)
+    //     expect(stdout).toContain('Usage')
+    // })
 
     test('exit if missing environment variables', async () => {
         const { stdout, stderr } = await execa(`echo abc | tsm ${cliPath}`, {
