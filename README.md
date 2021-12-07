@@ -21,9 +21,9 @@ brew install coreutils # optional but recommeneded, turn off buffering in pipe
 splunk-stdio-collector [options]
 
 Options:
--sc, --source <str>      Set \`source\` field in logs [default: stdio]
--st, --sourcetype <str>  Set \`sourcetype\` field in logs
---host <str>             Set \`host\` field in logs [default: host name of the operating system]
+-sc, --source <str>      Set `source` field in logs [default: stdio]
+-st, --sourcetype <str>  Set `sourcetype` field in logs
+--host <str>             Set `host` field in logs [default: host name of the operating system]
 -q, --quiet              Don't forward logs to stdout
 -s, --silent             Mute outputs
 
