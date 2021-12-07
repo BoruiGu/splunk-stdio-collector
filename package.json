@@ -50,7 +50,7 @@
         "@types/jest": "^27.0.3",
         "@types/node": "^16.11.11",
         "@types/splunk-logging": "^0.11.0",
-        "esbuild": "^0.14.1",
+        "esbuild": "^0.14.2",
         "execa": "^6.0.0",
         "extract-changelog-release": "^1.0.2",
         "husky": "^7.0.4",
