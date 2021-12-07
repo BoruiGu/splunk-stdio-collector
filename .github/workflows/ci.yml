@@ -64,3 +64,6 @@ jobs:
               if: ${{ steps.should_release.outputs.should_release == 'y' }}
             - name: Publish NPM
               run: npm publish
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+              if: ${{ steps.should_release.outputs.should_release == 'y' }}
