@@ -51,6 +51,15 @@ describe('cli', () => {
         expect(flush).not.toHaveBeenCalled()
     })
 
+    /**
+     * https://github.com/istanbuljs/spawn-wrap/tree/f0a2ab2a3fc99a720450a0a4d8c06fb996646be1
+     * https://github.com/lukeed/tsm/blob/master/src/loader.ts
+     * https://nodejs.org/api/esm.html#loaders
+     * https://github.com/facebook/jest/issues/5274
+     * https://github.com/facebook/jest/issues/9467
+     * https://nodejs.org/api/vm.html#example-running-an-http-server-within-a-vm
+     */
+
     // test('send logs to splunk and stdout', async () => {
     //     jest.spyOn(console, 'log')
 
