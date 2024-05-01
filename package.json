@@ -40,7 +40,7 @@
         "commit-msg": "commitlint --edit $1"
     },
     "dependencies": {
-        "meow": "^11.0.0",
+        "meow": "^13.2.0",
         "splunk-logging": "^0.11.1",
         "strip-ansi": "^7.0.1"
     },
