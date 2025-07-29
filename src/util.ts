@@ -27,7 +27,7 @@ export function createLogger({ packageName, quiet, silent }: { packageName: stri
 
 type AttachErrorHandlerFn = <T extends (...args: any[]) => Promise<any>>(
     fn: T,
-    errorHandler: (err: unknown) => void
+    errorHandler: (err: unknown) => void,
 ) => (...args: Parameters<T>) => ReturnType<T>
 
 export const attachErrorHandler: AttachErrorHandlerFn =
