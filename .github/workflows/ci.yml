@@ -8,12 +8,12 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            - uses: actions/checkout@v4
               with:
                   fetch-depth: 0
-            - uses: actions/setup-node@v2
+            - uses: actions/setup-node@v4
               with:
-                  node-version: '16'
+                  node-version: '22'
                   cache: 'npm'
                   registry-url: 'https://registry.npmjs.org'
             - run: npm ci
@@ -40,7 +40,7 @@ jobs:
                   EOF
                   )
                   should_release=$(echo $script | node -)
-                  echo "::set-output name=should_release::$should_release"
+                  echo "should_release=$should_release" >> "$GITHUB_OUTPUT"
               env:
                   COMMIT_MESSAGES: ${{ join(github.event.commits.*.message) }}
             - name: Prepare release
@@ -54,7 +54,7 @@ jobs:
                   npx extract-changelog-release > RELEASE_BODY.md
                   npm run build
                   git push --follow-tags
-                  echo ::set-output name=tag_name::$(git describe HEAD --abbrev=0)
+                  echo "tag_name=$(git describe HEAD --abbrev=0)" >> "$GITHUB_OUTPUT"
               if: ${{ steps.should_release.outputs.should_release == 'y' }}
             - name: Release
               uses: softprops/action-gh-release@v1

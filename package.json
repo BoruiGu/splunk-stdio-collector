@@ -40,27 +40,27 @@
         "commit-msg": "commitlint --edit $1"
     },
     "dependencies": {
-        "meow": "^11.0.0",
+        "meow": "^13.2.0",
         "splunk-logging": "^0.11.1",
         "strip-ansi": "^7.0.1"
     },
     "devDependencies": {
-        "@commitlint/cli": "^18.4.3",
-        "@commitlint/config-conventional": "^17.0.3",
-        "@types/jest": "^27.0.3",
-        "@types/node": "^20.2.5",
+        "@commitlint/cli": "^19.8.1",
+        "@commitlint/config-conventional": "^19.8.1",
+        "@types/jest": "^30.0.0",
+        "@types/node": "^24.1.0",
         "@types/splunk-logging": "^0.11.0",
-        "esbuild": "^0.19.2",
-        "execa": "^7.1.1",
+        "esbuild": "^0.25.8",
+        "execa": "^9.6.0",
         "extract-changelog-release": "^1.0.2",
-        "husky": "^8.0.1",
-        "jest": "^27.4.3",
-        "lint-staged": "^13.0.3",
-        "prettier": "^2.5.1",
+        "husky": "^9.1.7",
+        "jest": "^30.0.5",
+        "lint-staged": "^16.1.2",
+        "prettier": "^3.6.2",
         "standard-version": "^9.3.2",
-        "ts-jest": "^27.1.0",
+        "ts-jest": "^29.4.0",
         "tsm": "^2.2.1",
-        "typescript": "^4.5.2"
+        "typescript": "^5.8.3"
     },
     "__todo": "not collect coverage due to istanbul esm issue https://github.com/istanbuljs/istanbuljs/issues/614",
     "jest": {

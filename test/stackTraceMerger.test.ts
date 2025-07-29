@@ -1,6 +1,6 @@
 import * as stream from 'stream'
-import { stackTraceMerger } from '../src/stackTraceMerger'
-import { toArray } from './testUtil'
+import { stackTraceMerger } from '../src/stackTraceMerger.js'
+import { toArray } from './testUtil.js'
 
 test('stackTraceMerger', async () => {
     let output: string[]

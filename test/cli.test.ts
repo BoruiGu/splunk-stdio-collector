@@ -1,4 +1,3 @@
-import tty from 'tty'
 import { execa, Options } from 'execa'
 import { dirname, resolve } from 'path'
 import { fileURLToPath } from 'url'

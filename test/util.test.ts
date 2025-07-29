@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals'
-import { createLogger, noop } from '../src/util'
+import { createLogger, noop } from '../src/util.js'
 
 describe('util', () => {
     test('createLogger', async () => {

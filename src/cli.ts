@@ -40,12 +40,12 @@ $ cat log.txt | ssc --quiet
         flags: {
             source: {
                 type: 'string',
-                alias: 'sc',
+                shortFlag: 'sc',
                 default: 'stdio',
             },
             sourcetype: {
                 type: 'string',
-                alias: 'st',
+                shortFlag: 'st',
             },
             host: {
                 type: 'string',
@@ -54,23 +54,23 @@ $ cat log.txt | ssc --quiet
             quiet: {
                 type: 'boolean',
                 default: false,
-                alias: 'q',
+                shortFlag: 'q',
             },
             silent: {
                 type: 'boolean',
                 default: false,
-                alias: 's',
+                shortFlag: 's',
             },
             help: {
-                alias: 'h',
+                shortFlag: 'h',
             },
             version: {
-                alias: 'v',
+                shortFlag: 'v',
             },
         },
         autoHelp: true,
         autoVersion: true,
-    }
+    },
 )
 
 const isPipedIn = fstatSync(process.stdin.fd).isFIFO()

@@ -1,6 +1,6 @@
 import * as stream from 'stream'
-import { splitter } from '../src/splitter'
-import { concat, divide } from './testUtil'
+import { splitter } from '../src/splitter.js'
+import { concat, divide } from './testUtil.js'
 
 test('splitter', async () => {
     let output: string
