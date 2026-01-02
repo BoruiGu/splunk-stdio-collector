@@ -48,7 +48,7 @@
         "@commitlint/cli": "^20.1.0",
         "@commitlint/config-conventional": "^20.0.0",
         "@types/jest": "^30.0.0",
-        "@types/node": "^24.1.0",
+        "@types/node": "^25.0.3",
         "@types/splunk-logging": "^0.11.0",
         "esbuild": "^0.27.0",
         "execa": "^9.6.0",
